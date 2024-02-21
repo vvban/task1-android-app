@@ -10,5 +10,14 @@ data class LocationInfo(
 )
 
 data class CurrentInfo(
-    val temp_c: Double
+    val temp_c: Double,
+    val condition: Condition,
+    val wind_mph: Double,
+    val wind_kph: Double,
+    val wind_dir: String
+)
+
+data class Condition(
+    val text: String,
+    val icon: String
 )

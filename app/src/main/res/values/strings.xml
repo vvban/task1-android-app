@@ -1,5 +1,4 @@
 <resources>
     <string name="app_name">Task1 Android App</string>
-    <string name="city_name_placeholder">City</string>
-    <string name="city_temp_placeholder">C</string>
+    <string name="back_button_text">Back</string>
 </resources>

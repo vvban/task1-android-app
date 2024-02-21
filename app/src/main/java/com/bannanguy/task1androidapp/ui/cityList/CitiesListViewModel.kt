@@ -14,9 +14,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class CitiesListViewModel(private val context: Context) : ViewModel() {
+class CitiesListViewModel() : ViewModel() {
 
-    private val citiesInfoLiveData: MutableLiveData<List<CityWeatherInfo>> by lazy {
+    private val citiesWeatherInfoLiveData: MutableLiveData<List<CityWeatherInfo>> by lazy {
         MutableLiveData<List<CityWeatherInfo>>()
     }
 
@@ -55,7 +55,7 @@ class CitiesListViewModel(private val context: Context) : ViewModel() {
                         )
                     }
 
-                    citiesInfoLiveData.postValue(citiesInfoList)
+                    citiesWeatherInfoLiveData.postValue(citiesInfoList)
                 }
             }
 
@@ -67,7 +67,7 @@ class CitiesListViewModel(private val context: Context) : ViewModel() {
     }
 
     fun observeLiveData() : LiveData<List<CityWeatherInfo>> {
-        return citiesInfoLiveData
+        return citiesWeatherInfoLiveData
     }
 
 }
@@ -77,9 +77,7 @@ class CitiesListViewModelFactory(private val context: Context) : ViewModelProvid
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(CitiesListViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return CitiesListViewModel(
-                context = context
-            ) as T
+            return CitiesListViewModel() as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

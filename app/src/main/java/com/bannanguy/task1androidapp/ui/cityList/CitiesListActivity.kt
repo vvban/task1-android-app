@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bannanguy.task1androidapp.R
 import com.bannanguy.task1androidapp.data.CityWeatherInfo
+import com.bannanguy.task1androidapp.ui.cityDetail.CityDetailActivity
 
 class CitiesListActivity : AppCompatActivity() {
     private val citiesListViewModel by viewModels<CitiesListViewModel> {
@@ -40,8 +41,8 @@ class CitiesListActivity : AppCompatActivity() {
     /* Opens CityDetailActivity when RecyclerView item is clicked. */
     private fun adapterOnClick(cityWeatherInfo: CityWeatherInfo) {
         Log.d("Event", "Click")
-//        val intent = Intent(this, CityDetailActivity()::class.java)
+        val intent = Intent(this, CityDetailActivity()::class.java)
 //        intent.putExtra(CITY_ID, cityWeatherInfo.id)
-//        startActivity(intent)
+        startActivity(intent)
     }
 }
