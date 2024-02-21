@@ -2,6 +2,7 @@
     <string name="app_name">Погода в України</string>
     <string name="back_button_text">Назад</string>
     <string name="city_weather_icon_content_description">Іконка погоди</string>
+    <string name="city_name_unknown">Невідоме місто</string>
     <string name="city1_name">Ужгород</string>
     <string name="city2_name">Черкаси</string>
     <string name="city3_name">Чернігів</string>
