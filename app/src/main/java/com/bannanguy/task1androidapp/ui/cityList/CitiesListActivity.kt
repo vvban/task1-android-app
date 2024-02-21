@@ -1,6 +1,5 @@
 package com.bannanguy.task1androidapp.ui.cityList
 
-import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -30,11 +29,15 @@ class CitiesListActivity : AppCompatActivity() {
 
         citiesListViewModel.observeLiveData().observe(this) {
             it?.let {
+                // Because we load weather data by one request for each location
+                // Only notify that LiveData was changed
+                citiesAdapter.notifyItemInsertedAtLastPosition(it.size - 1)
+                // FIXME: Need we submit List or only notify?
                 citiesAdapter.submitList(it as MutableList<CityWeatherInfo>)
             }
         }
 
-        citiesListViewModel.getWeather()
+        citiesListViewModel.loadWeatherData(resources)
 
     }
 

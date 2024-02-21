@@ -9,9 +9,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bannanguy.task1androidapp.R
 import com.bannanguy.task1androidapp.data.CityWeatherInfo
+import com.bannanguy.task1androidapp.data.getListOfCities
 
 class CitiesAdapter(private val onClick: (CityWeatherInfo) -> Unit) :
     ListAdapter<CityWeatherInfo, CitiesAdapter.CityWeatherInfoViewHolder>(CityWeatherInfoDiffCallback) {
+
+    fun notifyItemInsertedAtLastPosition (lastPosition: Int) {
+        notifyItemInserted(lastPosition)
+    }
 
     /* ViewHolder for CityWeatherInfo, takes in the inflated view and the onClick behavior. */
     class CityWeatherInfoViewHolder(itemView: View, val onClick: (CityWeatherInfo) -> Unit) :
@@ -32,7 +37,7 @@ class CitiesAdapter(private val onClick: (CityWeatherInfo) -> Unit) :
         fun bind(cityWeatherInfo: CityWeatherInfo) {
             currentCityWeatherInfo = cityWeatherInfo
 
-            cityNameTextView.text = cityWeatherInfo.name
+            cityNameTextView.text = cityWeatherInfo.name // FIXME: get name from getListOfCities()
             cityTempTextView.text = cityWeatherInfo.temp.toString()
         }
     }
@@ -46,6 +51,7 @@ class CitiesAdapter(private val onClick: (CityWeatherInfo) -> Unit) :
 
     /* Gets current CityWeatherInfo and uses it to bind view. */
     override fun onBindViewHolder(holder: CityWeatherInfoViewHolder, position: Int) {
+        if (itemCount - 1 < position) return // FIXME: ?
         val cityWeatherInfo = getItem(position)
         holder.bind(cityWeatherInfo)
     }
@@ -57,6 +63,6 @@ object CityWeatherInfoDiffCallback : DiffUtil.ItemCallback<CityWeatherInfo>() {
     }
 
     override fun areContentsTheSame(oldItem: CityWeatherInfo, newItem: CityWeatherInfo): Boolean {
-        return oldItem.name == newItem.name
+        return oldItem.city_id == newItem.city_id
     }
 }

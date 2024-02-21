@@ -3,159 +3,159 @@ package com.bannanguy.task1androidapp.data
 import android.content.res.Resources
 import com.bannanguy.task1androidapp.R
 
-fun getListOfCities(resources: Resources): List<City> {
+fun getListOfCities(resources: Resources): List<CityData> {
     return listOf(
-        City(
+        CityData(
             1,
             resources.getString(R.string.city1_name),
             48.58333,
             22.33333
         ),
-        City(
+        CityData(
             2,
             resources.getString(R.string.city2_name),
             49.25,
             31.33333
         ),
-        City(
+        CityData(
             3,
             resources.getString(R.string.city3_name),
             51.33333,
             32.0
         ),
-        City(
+        CityData(
             4,
             resources.getString(R.string.city4_name),
             48.25,
             26.0
         ),
-        City(
+        CityData(
             5,
             resources.getString(R.string.city5_name),
             45.0,
             34.0
         ),
-        City(
+        CityData(
             6,
             resources.getString(R.string.city6_name),
             48.5,
             35.0
         ),
-        City(
+        CityData(
             7,
             resources.getString(R.string.city7_name),
             48.0,
             37.66667
         ),
-        City(
+        CityData(
             8,
             resources.getString(R.string.city8_name),
             48.7,
             24.61667
         ),
-        City(
+        CityData(
             9,
             resources.getString(R.string.city9_name),
             49.5,
             27.0
         ),
-        City(
+        CityData(
             10,
             resources.getString(R.string.city10_name),
             49.5,
             36.5
         ),
-        City(
+        CityData(
             11,
             resources.getString(R.string.city11_name),
             46.75,
             33.66667
         ),
-        City(
+        CityData(
             12,
             resources.getString(R.string.city12_name),
             48.52185,
             32.24367
         ),
-        City(
+        CityData(
             13,
             resources.getString(R.string.city13_name),
             50.4429,
             30.54896
         ),
-        City(
+        CityData(
             14,
             resources.getString(R.string.city14_name),
             49.0,
             39.0
         ),
-        City(
+        CityData(
             15,
             resources.getString(R.string.city15_name),
             49.75,
             23.91667
         ),
-        City(
+        CityData(
             16,
             resources.getString(R.string.city16_name),
             47.41667,
             31.83333
         ),
-        City(
+        CityData(
             17,
             resources.getString(R.string.city17_name),
             46.75,
             30.25
         ),
-        City(
+        CityData(
             18,
             resources.getString(R.string.city18_name),
             49.47705,
             33.81866
         ),
-        City(
+        CityData(
             19,
             resources.getString(R.string.city19_name),
             51.0,
             26.5
         ),
-        City(
+        CityData(
             20,
             resources.getString(R.string.city20_name),
             44.58333,
             33.65
         ),
-        City(
+        CityData(
             21,
             resources.getString(R.string.city21_name),
             51.0,
             34.0
         ),
-        City(
+        CityData(
             22,
             resources.getString(R.string.city22_name),
             49.4,
             25.63333
         ),
-        City(
+        CityData(
             23,
             resources.getString(R.string.city23_name),
             48.91667,
             28.66667
         ),
-        City(
+        CityData(
             24,
             resources.getString(R.string.city24_name),
             51.16667,
             24.86667
         ),
-        City(
+        CityData(
             25,
             resources.getString(R.string.city25_name),
             47.25,
             35.66667
         ),
-        City(
+        CityData(
             26,
             resources.getString(R.string.city26_name),
             50.58333,

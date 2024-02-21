@@ -1,14 +1,17 @@
 package com.bannanguy.task1androidapp.ui.cityList
 
 import android.content.Context
+import android.content.res.Resources
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.bannanguy.task1androidapp.api.weather.WeatherInstance
+import com.bannanguy.task1androidapp.data.CityData
 import com.bannanguy.task1androidapp.data.CityWeatherInfo
 import com.bannanguy.task1androidapp.data.WeatherResponse
+import com.bannanguy.task1androidapp.data.getListOfCities
 import com.bannanguy.task1androidapp.utils.ConfigPropertiesUtils
 import retrofit2.Call
 import retrofit2.Callback
@@ -20,7 +23,7 @@ class CitiesListViewModel() : ViewModel() {
         MutableLiveData<List<CityWeatherInfo>>()
     }
 
-    fun getWeather() {
+    fun loadWeatherData(resources: Resources) {
 
         val apiKey = ConfigPropertiesUtils.getValue("api")
 
@@ -29,41 +32,47 @@ class CitiesListViewModel() : ViewModel() {
             return
         }
 
-        WeatherInstance.api.fetchWeather(
-            apiKey,
-            "London"
-        ).enqueue(object : Callback<WeatherResponse> {
-            override fun onResponse(
-                call: Call<WeatherResponse>,
-                response: Response<WeatherResponse>
-            ) {
-                response.body()?.let { weatherResponse ->
+        // FIXME: In memory list is not allocated and isn't fixed
+        //  -> recreating each time when one item will be inserted
+        val listOfCities: List<CityData> = getListOfCities(resources)
+        var currentLiveData: MutableList<CityWeatherInfo> =
+            citiesWeatherInfoLiveData.value?.toMutableList() ?:
+            ArrayList<CityWeatherInfo>(0).toMutableList()
 
-                    // FIXME: temp
-                    var citiesInfoList = List(3) {
-                        CityWeatherInfo(
+        listOfCities.forEach { city ->
+            WeatherInstance.api.fetchSingleCityWeather(
+                apiKey,
+                city.lat.toString() + "," + city.lon.toString()
+            ).enqueue(object : Callback<WeatherResponse> {
+                override fun onResponse(
+                    call: Call<WeatherResponse>,
+                    response: Response<WeatherResponse>
+                ) {
+                    response.body()?.let { weatherResponse ->
+
+                        val cityWeatherInfo = CityWeatherInfo(
+                            city.id,
                             weatherResponse.location.name,
                             weatherResponse.current.temp_c
                         )
-                        CityWeatherInfo(
-                            weatherResponse.location.name,
-                            weatherResponse.current.temp_c
+
+                        currentLiveData.add(cityWeatherInfo)
+
+                        citiesWeatherInfoLiveData.postValue(
+                            currentLiveData
                         )
-                        CityWeatherInfo(
-                            weatherResponse.location.name,
-                            weatherResponse.current.temp_c
-                        )
+
+//                        citiesWeatherInfoLiveData.postValue(citiesInfoList)
                     }
-
-                    citiesWeatherInfoLiveData.postValue(citiesInfoList)
                 }
-            }
 
-            override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
-                Log.e("MainViewModel", t.message.toString())
-            }
+                override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
+                    Log.e("MainViewModel", t.message.toString())
+                }
 
-        })
+            })
+        }
+
     }
 
     fun observeLiveData() : LiveData<List<CityWeatherInfo>> {

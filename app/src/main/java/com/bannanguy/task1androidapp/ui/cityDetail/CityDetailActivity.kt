@@ -59,6 +59,7 @@ class CityDetailActivity : AppCompatActivity() {
         // TODO: temp
         cityDetailViewModel.updateLiveData(
             CityDetailWeatherInfo(
+                1,
                 "Київ",
                 23.3444,
                 "//cdn.weatherapi.com/weather/64x64/night/176.png",

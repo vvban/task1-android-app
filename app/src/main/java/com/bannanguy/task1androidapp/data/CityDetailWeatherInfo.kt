@@ -1,6 +1,7 @@
 package com.bannanguy.task1androidapp.data
 
 data class CityDetailWeatherInfo(
+    val city_id: Long,
     val name: String,
     val temp_c: Double,
     val condition_icon_uri: String,

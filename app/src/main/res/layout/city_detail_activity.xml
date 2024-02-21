@@ -28,9 +28,8 @@
         android:id="@+id/city_weather_icon"
         android:layout_width="64dp"
         android:layout_height="64dp"
+        android:contentDescription="@string/city_weather_icon_content_description"
         android:layout_gravity="center" />
-<!--        app:srcCompat="@drawable/rose" -->
-<!--        android:contentDescription="@string/flower_image_content_description"-->
 
     <TextView
         android:id="@+id/city_condition_text"
