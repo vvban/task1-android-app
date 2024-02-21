@@ -1,4 +1,30 @@
 <resources>
-    <string name="app_name">Task1 Android App</string>
+    <string name="app_name">Погода в України</string>
     <string name="back_button_text">Back</string>
+    <string name="city1_name">Ужгород</string>
+    <string name="city2_name">Черкаси</string>
+    <string name="city3_name">Чернігів</string>
+    <string name="city4_name">Чернівці</string>
+    <string name="city5_name">Крим</string>
+    <string name="city6_name">Дніпро</string>
+    <string name="city7_name">Донецьк</string>
+    <string name="city8_name">Івано-Франківськ</string>
+    <string name="city9_name">Хмельницький</string>
+    <string name="city10_name">Харків</string>
+    <string name="city11_name">Херсон</string>
+    <string name="city12_name">Кропивницький</string>
+    <string name="city13_name">Київ</string>
+    <string name="city14_name">Луганськ</string>
+    <string name="city15_name">Львів</string>
+    <string name="city16_name">Миколаїв</string>
+    <string name="city17_name">Одеса</string>
+    <string name="city18_name">Полтава</string>
+    <string name="city19_name">Рівне</string>
+    <string name="city20_name">Севастополь</string>
+    <string name="city21_name">Суми</string>
+    <string name="city22_name">Тернопіль</string>
+    <string name="city23_name">Вінниця</string>
+    <string name="city24_name">Луцьк</string>
+    <string name="city25_name">Мелітополь</string>
+    <string name="city26_name">Житомир</string>
 </resources>
