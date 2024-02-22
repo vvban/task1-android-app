@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -40,6 +39,7 @@ class CitiesListActivity : AppCompatActivity() {
         citiesListViewModel.observeLiveData().observe(this) {
             it?.let {
                 citiesAdapter.submitList(it as MutableList<CityWeatherInfo>)
+                // We can't known when the last item will be added
                 citiesAdapter.notifyDataSetChanged()
             }
         }
@@ -52,7 +52,7 @@ class CitiesListActivity : AppCompatActivity() {
     private fun adapterOnClick(cityWeatherInfo: CityWeatherInfo) {
         val intent = Intent(this, CityDetailActivity()::class.java)
         intent.putExtra(CITY_ID, cityWeatherInfo.city_id)
-        finish() //
+        finish() // Easy way to clear previous data
         startActivity(intent)
     }
 

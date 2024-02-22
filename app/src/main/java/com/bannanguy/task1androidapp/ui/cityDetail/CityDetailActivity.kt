@@ -36,8 +36,6 @@ class CityDetailActivity : AppCompatActivity() {
 
         var currentCityId: Long? = null
 
-        // FIXME: Move these code to adapter
-
         /* Connect variables to UI elements. */
         val cityNameTextView: TextView = this.findViewById(R.id.city_name)
         val cityTempTextView: TextView = this.findViewById(R.id.city_temp)
@@ -71,7 +69,6 @@ class CityDetailActivity : AppCompatActivity() {
             val intent = Intent(this, CitiesListActivity()::class.java)
             startActivity(intent)
         }
-
 
         val bundle: Bundle? = intent.extras
         if (bundle != null) {
