@@ -33,7 +33,6 @@ class CitiesListViewModel(private val dataSource: CityDataSource) : ViewModel() 
         val listOfCities = dataSource.getCityList()
 
         val currentListOfCityWeatherInfo: MutableList<CityWeatherInfo> =
-            citiesWeatherInfoLiveData.value?.toMutableList() ?:
             ArrayList<CityWeatherInfo>(0).toMutableList()
 
         listOfCities.forEach { city ->
