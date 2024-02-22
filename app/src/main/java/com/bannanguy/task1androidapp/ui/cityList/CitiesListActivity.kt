@@ -52,6 +52,7 @@ class CitiesListActivity : AppCompatActivity() {
     private fun adapterOnClick(cityWeatherInfo: CityWeatherInfo) {
         val intent = Intent(this, CityDetailActivity()::class.java)
         intent.putExtra(CITY_ID, cityWeatherInfo.city_id)
+        finish() //
         startActivity(intent)
     }
 

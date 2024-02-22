@@ -2,10 +2,10 @@ package com.bannanguy.task1androidapp.ui.cityDetail
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.bannanguy.task1androidapp.R
@@ -14,6 +14,7 @@ import com.bannanguy.task1androidapp.ui.cityList.CitiesListActivity
 import com.squareup.picasso.Picasso
 import kotlin.math.round
 
+
 class CityDetailActivity : AppCompatActivity() {
 
     private val cityDetailViewModel by viewModels<CityDetailViewModel> {
@@ -21,8 +22,17 @@ class CityDetailActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.city_detail_activity)
+
+        val onBackPressedCallback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@CityDetailActivity, CitiesListActivity()::class.java)
+                startActivity(intent)
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
         var currentCityId: Long? = null
 
@@ -77,4 +87,5 @@ class CityDetailActivity : AppCompatActivity() {
         }
 
     }
+
 }
