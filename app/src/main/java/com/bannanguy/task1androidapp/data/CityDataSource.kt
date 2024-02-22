@@ -2,16 +2,15 @@ package com.bannanguy.task1androidapp.data
 
 import android.content.res.Resources
 
-/* Handles operations on citiesList and holds details about it. */
+/* Handles operations on citiesList and holds details about. */
 class CityDataSource(resources: Resources) {
     private val citiesList = getListOfCities(resources)
 
     /* Returns city given an ID. */
     fun getCityForId(id: Long): CityData? {
-        citiesList?.let { cities ->
+        citiesList.let { cities ->
             return cities.firstOrNull{ it.id == id}
         }
-        return null
     }
 
     fun getCityList(): List<CityData> {

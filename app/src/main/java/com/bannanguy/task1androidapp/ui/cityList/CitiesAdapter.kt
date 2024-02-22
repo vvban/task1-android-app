@@ -43,7 +43,11 @@ class CitiesAdapter(
             val cityData = CityDataSource.getDataSource(resources)
                 .getCityForId(cityWeatherInfo.city_id)
             cityNameTextView.text = cityData?.name ?: resources.getString(R.string.city_name_unknown)
-            cityTempTextView.text = cityWeatherInfo.temp.toString()
+            cityTempTextView.text = String.format(
+                "%s %s",
+                cityWeatherInfo.temp.toString(),
+                resources.getString(R.string.celsius_symbol)
+            )
         }
     }
 

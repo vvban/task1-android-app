@@ -30,7 +30,6 @@ class CitiesListViewModel(private val dataSource: CityDataSource) : ViewModel() 
             return
         }
 
-//        val listOfCities: List<CityData> = CityDataSource.getDataSource(resources).getFlowerList()
         val listOfCities = dataSource.getCityList()
 
         val currentListOfCityWeatherInfo: MutableList<CityWeatherInfo> =
@@ -63,7 +62,7 @@ class CitiesListViewModel(private val dataSource: CityDataSource) : ViewModel() 
                 }
 
                 override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
-                    Log.e("MainViewModel", t.message.toString())
+                    Log.e("CitiesListViewModel", t.message.toString())
                 }
 
             })

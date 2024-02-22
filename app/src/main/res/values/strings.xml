@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Погода в України</string>
+    <string name="app_name">Погода в Україні</string>
     <string name="back_button_text">Назад</string>
     <string name="city_weather_icon_content_description">Іконка погоди</string>
     <string name="city_name_unknown">Невідоме місто</string>
@@ -29,4 +29,7 @@
     <string name="city24_name">Луцьк</string>
     <string name="city25_name">Мелітополь</string>
     <string name="city26_name">Житомир</string>
+    <string name="celsius_symbol">°C</string>
+    <string name="city_wind_mps_header">Швидкість вітру (м/c):</string>
+    <string name="city_wind_dir_header">Напрям вітру:</string>
 </resources>

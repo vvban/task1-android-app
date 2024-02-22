@@ -11,6 +11,8 @@ import com.bannanguy.task1androidapp.data.CityDataSource
 import com.bannanguy.task1androidapp.data.CityWeatherInfo
 import com.bannanguy.task1androidapp.ui.cityDetail.CityDetailActivity
 
+const val CITY_ID = "city id"
+
 class CitiesListActivity : AppCompatActivity() {
     private val citiesListViewModel by viewModels<CitiesListViewModel> {
         CitiesListViewModelFactory(this)
@@ -47,7 +49,7 @@ class CitiesListActivity : AppCompatActivity() {
     /* Opens CityDetailActivity when RecyclerView item is clicked. */
     private fun adapterOnClick(cityWeatherInfo: CityWeatherInfo) {
         val intent = Intent(this, CityDetailActivity()::class.java)
-//        intent.putExtra(CITY_ID, cityWeatherInfo.id)
+        intent.putExtra(CITY_ID, cityWeatherInfo.city_id)
         startActivity(intent)
     }
 }

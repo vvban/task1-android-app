@@ -8,9 +8,10 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.bannanguy.task1androidapp.R
-import com.bannanguy.task1androidapp.data.CityDetailWeatherInfo
+import com.bannanguy.task1androidapp.ui.cityList.CITY_ID
 import com.bannanguy.task1androidapp.ui.cityList.CitiesListActivity
 import com.squareup.picasso.Picasso
+import kotlin.math.round
 
 class CityDetailActivity : AppCompatActivity() {
 
@@ -22,57 +23,56 @@ class CityDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.city_detail_activity)
 
-        var currentFlowerId: Long? = null
+        var currentCityId: Long? = null
+
+        // FIXME: Move these code to adapter
 
         /* Connect variables to UI elements. */
         val cityNameTextView: TextView = this.findViewById(R.id.city_name)
         val cityTempTextView: TextView = this.findViewById(R.id.city_temp)
         val cityWeatherIconImageView: ImageView = this.findViewById(R.id.city_weather_icon)
         val cityConditionTextView: TextView = this.findViewById(R.id.city_condition_text)
-        val cityWindMphTextView: TextView = this.findViewById(R.id.city_wind_mph)
-        val cityWindKphTextView: TextView = this.findViewById(R.id.city_wind_kph)
+        val cityWindKphTextView: TextView = this.findViewById(R.id.city_wind_mps)
         val cityWindDirTextView: TextView = this.findViewById(R.id.city_wind_dir)
         val backButton: Button = findViewById(R.id.back_button)
 
-//        val bundle: Bundle? = intent.extras
-//        if (bundle != null) {
-//            currentFlowerId = bundle.getLong(FLOWER_ID)
-//        }
-
         cityDetailViewModel.observeLiveData().observe(this) {
             it?.let {
-//                citiesAdapter.submitList(it as MutableList<CityWeatherInfo>)
                 cityNameTextView.text = it.name
-                cityTempTextView.text = it.temp_c.toString()
+                cityTempTextView.text = String.format(
+                    "%s %s",
+                    it.temp_c.toString(),
+                    resources.getString(R.string.celsius_symbol)
+                )
                 Picasso.get()
                     .load("https:" + it.condition_icon_uri)
                     .placeholder(R.drawable.image_placeholder)
                     .error(R.drawable.image_placeholder_error)
                     .into(cityWeatherIconImageView)
                 cityConditionTextView.text = it.condition_text
-                cityWindMphTextView.text = it.wind_mph.toString()
-                cityWindKphTextView.text = it.wind_kph.toString()
+                val windMps = round(it.wind_kph * 1000 / 3600 * 100) / 100
+                cityWindKphTextView.text = windMps.toString()
                 cityWindDirTextView.text = it.wind_dir
             }
         }
 
-        // TODO: temp
-        cityDetailViewModel.updateLiveData(
-            CityDetailWeatherInfo(
-                1,
-                "Київ",
-                23.3444,
-                "//cdn.weatherapi.com/weather/64x64/night/176.png",
-                "Все добре",
-                34.344,
-                32.3443,
-                "Вітер схід"
-            )
-        )
-
         backButton.setOnClickListener {
             val intent = Intent(this, CitiesListActivity()::class.java)
             startActivity(intent)
+        }
+
+
+        val bundle: Bundle? = intent.extras
+        if (bundle != null) {
+            currentCityId = bundle.getLong(CITY_ID)
+        }
+
+        if (currentCityId != null) {
+            cityDetailViewModel.loadWeatherDataOfCity(
+                currentCityId
+            )
+        } else {
+            cityNameTextView.text = resources.getString(R.string.city_name_unknown)
         }
 
     }
