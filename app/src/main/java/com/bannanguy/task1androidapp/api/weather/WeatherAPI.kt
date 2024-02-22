@@ -47,7 +47,9 @@ class WeatherAPI {
                 }
 
                 override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
-                    Log.e("CityDetailViewModel", t.message.toString())
+                    // TODO: Sometimes https://api.weatherapi.com may block you.
+                    //  How to inform user about it?
+                    Log.e("WeatherAPI", t.message.toString())
                 }
 
             })
