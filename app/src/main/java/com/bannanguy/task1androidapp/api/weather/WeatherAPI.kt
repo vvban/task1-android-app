@@ -7,11 +7,13 @@ import com.bannanguy.task1androidapp.utils.ConfigPropertiesUtils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 
 class WeatherAPI {
     companion object {
 
         fun getWeatherByCity(
+            cacheDir: File,
             cityData: CityData,
             onResponseCallback: (WeatherResponse) -> Unit
         ) {
@@ -23,7 +25,13 @@ class WeatherAPI {
                 return
             }
 
-            WeatherInstance.api.fetchSingleCityWeather(
+            RetrofitClient.setupCache(cacheDir)
+
+            val api: WeatherService by lazy {
+                RetrofitClient.getClient().create(WeatherService::class.java)
+            }
+
+            api.fetchSingleCityWeather(
                 apiKey,
                 cityData.lat.toString() + "," + cityData.lon.toString()
             ).enqueue(object : Callback<WeatherResponse> {

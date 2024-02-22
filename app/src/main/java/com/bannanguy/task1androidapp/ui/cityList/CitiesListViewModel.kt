@@ -8,8 +8,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.bannanguy.task1androidapp.api.weather.WeatherAPI
 import com.bannanguy.task1androidapp.data.*
 import com.bannanguy.task1androidapp.utils.ConfigPropertiesUtils
+import java.io.File
 
-class CitiesListViewModel(private val dataSource: CityDataSource) : ViewModel() {
+class CitiesListViewModel(
+    private val dataSource: CityDataSource,
+    private val cacheDir: File
+) : ViewModel() {
 
     private val citiesWeatherInfoLiveData: MutableLiveData<List<CityWeatherInfo>> by lazy {
         MutableLiveData<List<CityWeatherInfo>>()
@@ -30,7 +34,10 @@ class CitiesListViewModel(private val dataSource: CityDataSource) : ViewModel() 
             ArrayList<CityWeatherInfo>(0).toMutableList()
 
         listOfCities.forEach { city ->
-            WeatherAPI.getWeatherByCity(city) { weatherResponse ->
+            WeatherAPI.getWeatherByCity(
+                cacheDir,
+                city
+            ) { weatherResponse ->
                 val cityWeatherInfo = CityWeatherInfo(
                     city.id,
                     weatherResponse.location.name,
@@ -58,7 +65,8 @@ class CitiesListViewModelFactory(private val context: Context) : ViewModelProvid
         if (modelClass.isAssignableFrom(CitiesListViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return CitiesListViewModel(
-                dataSource = CityDataSource.getDataSource(context.resources)
+                dataSource = CityDataSource.getDataSource(context.resources),
+                cacheDir = context.cacheDir
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
