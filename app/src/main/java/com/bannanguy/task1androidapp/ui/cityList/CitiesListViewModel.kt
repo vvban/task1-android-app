@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.bannanguy.task1androidapp.api.weather.WeatherAPI
+import com.bannanguy.task1androidapp.data.api.weather.WeatherAPI
 import com.bannanguy.task1androidapp.data.*
 import com.bannanguy.task1androidapp.utils.ConfigPropertiesUtils
 import java.io.File

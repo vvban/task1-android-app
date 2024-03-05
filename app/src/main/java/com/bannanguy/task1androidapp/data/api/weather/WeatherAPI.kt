@@ -1,4 +1,4 @@
-package com.bannanguy.task1androidapp.api.weather
+package com.bannanguy.task1androidapp.data.api.weather
 
 import android.util.Log
 import com.bannanguy.task1androidapp.data.CityData

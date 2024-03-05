@@ -1,4 +1,4 @@
-package com.bannanguy.task1androidapp.api.weather
+package com.bannanguy.task1androidapp.data.api.weather
 
 import okhttp3.Cache
 import okhttp3.OkHttpClient
@@ -13,7 +13,7 @@ object RetrofitClient {
     private lateinit var cache: Cache
 
     fun setupCache(cacheDir: File) {
-        if (::cache.isInitialized) return
+        if (RetrofitClient::cache.isInitialized) return
         cache = Cache(cacheDir, CACHE_SIZE.toLong())
     }
 
