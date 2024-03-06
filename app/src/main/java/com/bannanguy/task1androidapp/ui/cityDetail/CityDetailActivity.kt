@@ -9,11 +9,14 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.bannanguy.task1androidapp.R
-import com.bannanguy.task1androidapp.ui.cityList.CITY_ID
+import com.bannanguy.task1androidapp.data.api.weather.RetrofitClient
+import com.bannanguy.task1androidapp.data.api.weather.RetrofitClientFactory
 import com.bannanguy.task1androidapp.ui.cityList.CitiesListActivity
 import com.squareup.picasso.Picasso
+import java.io.File
 import kotlin.math.round
 
+const val CITY_ID = "city id"
 
 class CityDetailActivity : AppCompatActivity() {
 
@@ -21,11 +24,24 @@ class CityDetailActivity : AppCompatActivity() {
         CityDetailViewModelFactory(this)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    private var currentCityId: Long? = null
+    private lateinit var retrofitWeatherClient: RetrofitClient
 
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.city_detail_activity)
 
+        addOnBackPressedCallback()
+        setOnClickListener()
+
+        readCurrentCityId()
+        observeData()
+
+        initRetrofitClient(cacheDir)
+        loadWeatherData()
+    }
+
+    private fun addOnBackPressedCallback() {
         val onBackPressedCallback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 val intent = Intent(this@CityDetailActivity, CitiesListActivity()::class.java)
@@ -34,16 +50,15 @@ class CityDetailActivity : AppCompatActivity() {
         }
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
-        var currentCityId: Long? = null
+    }
 
-        /* Connect variables to UI elements. */
+    private fun observeData() {
         val cityNameTextView: TextView = this.findViewById(R.id.city_name)
         val cityTempTextView: TextView = this.findViewById(R.id.city_temp)
         val cityWeatherIconImageView: ImageView = this.findViewById(R.id.city_weather_icon)
         val cityConditionTextView: TextView = this.findViewById(R.id.city_condition_text)
         val cityWindKphTextView: TextView = this.findViewById(R.id.city_wind_mps)
         val cityWindDirTextView: TextView = this.findViewById(R.id.city_wind_dir)
-        val backButton: Button = findViewById(R.id.back_button)
 
         cityDetailViewModel.observeLiveData().observe(this) {
             it?.let {
@@ -65,24 +80,41 @@ class CityDetailActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    private fun setOnClickListener() {
+        val backButton: Button = findViewById(R.id.back_button)
+
         backButton.setOnClickListener {
             val intent = Intent(this, CitiesListActivity()::class.java)
             startActivity(intent)
         }
+    }
 
+    private fun readCurrentCityId() {
         val bundle: Bundle? = intent.extras
         if (bundle != null) {
             currentCityId = bundle.getLong(CITY_ID)
         }
+    }
 
+    private fun initRetrofitClient(cacheDir: File) {
+        retrofitWeatherClient = RetrofitClientFactory.createBySingleton(
+            "weatherapi",
+            cacheDir
+        )
+    }
+
+    private fun loadWeatherData() {
         if (currentCityId != null) {
             cityDetailViewModel.loadWeatherDataOfCity(
-                currentCityId
+                retrofitWeatherClient,
+                currentCityId!!
             )
         } else {
+            val cityNameTextView: TextView = this.findViewById(R.id.city_name)
             cityNameTextView.text = resources.getString(R.string.city_name_unknown)
         }
-
     }
 
 }

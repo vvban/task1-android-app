@@ -6,26 +6,71 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 
-object RetrofitClient {
-    private const val BASE_URL = "https://api.weatherapi.com/v1/"
-    private const val CACHE_SIZE = 15 * 60 // 15 minutes in seconds
+class RetrofitClient(okHttpClient: OkHttpClient, baseUrl: String) {
+    private var okHttpClient: OkHttpClient
+    private var baseUrl: String
 
-    private lateinit var cache: Cache
-
-    fun setupCache(cacheDir: File) {
-        if (RetrofitClient::cache.isInitialized) return
-        cache = Cache(cacheDir, CACHE_SIZE.toLong())
+    init {
+        this.okHttpClient = okHttpClient
+        this.baseUrl = baseUrl
     }
 
     fun getClient(): Retrofit {
-        val okHttpClient = OkHttpClient.Builder()
-            .cache(cache)
-            .build()
-
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(baseUrl)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+}
+
+object RetrofitClientFactory {
+    private const val WEATHERAPI_BASE_URL = "https://api.weatherapi.com/v1/"
+    private const val WEATHERAPI_CACHE_SIZE = 15L * 60L // 15 minutes in seconds
+
+    private var retrofitClientSingleton: RetrofitClient? = null
+
+    fun createBySingleton(type: String, cacheDir: File): RetrofitClient {
+        return when (type) {
+            "weatherapi" -> {
+                if (retrofitClientSingleton == null) {
+                    retrofitClientSingleton = create(type, cacheDir)
+                }
+                retrofitClientSingleton!!
+            }
+            else -> {
+                throw Exception("Unknown type of Retrofit client.")
+            }
+        }
+    }
+    private fun create(type: String, cacheDir: File): RetrofitClient {
+        when (type) {
+            "weatherapi" -> {
+                val cache = createCache(
+                    cacheDir,
+                    WEATHERAPI_CACHE_SIZE
+                )
+
+                return RetrofitClient(
+                    createOkHttpClient(
+                        cache
+                    ),
+                    WEATHERAPI_BASE_URL
+                )
+            }
+            else -> {
+                throw Exception("Unknown type of Retrofit client.")
+            }
+        }
+    }
+
+    private fun createCache(cacheDir: File, size: Long): Cache {
+        return Cache(cacheDir, size)
+    }
+
+    private fun createOkHttpClient(cache: Cache): OkHttpClient {
+        return OkHttpClient.Builder()
+            .cache(cache)
             .build()
     }
 }

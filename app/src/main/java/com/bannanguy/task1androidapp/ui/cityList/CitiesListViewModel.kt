@@ -7,27 +7,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.bannanguy.task1androidapp.data.api.weather.WeatherAPI
 import com.bannanguy.task1androidapp.data.*
-import com.bannanguy.task1androidapp.utils.ConfigPropertiesUtils
-import java.io.File
+import com.bannanguy.task1androidapp.data.api.weather.RetrofitClient
 
 class CitiesListViewModel(
-    private val dataSource: CityDataSource,
-    private val cacheDir: File
+    private val dataSource: CityDataSource
 ) : ViewModel() {
 
     private val citiesWeatherInfoLiveData: MutableLiveData<List<CityWeatherInfo>> by lazy {
         MutableLiveData<List<CityWeatherInfo>>()
     }
 
-    fun loadWeatherData() {
-
-        val apiKey = ConfigPropertiesUtils.getValue("api")
-
-        if (apiKey == null) {
-            println("Error: API key is null.")
-            return
-        }
-
+    fun loadWeatherData(
+        retrofitClient: RetrofitClient
+    ) {
         val listOfCities = dataSource.getCityList()
 
         val currentListOfCityWeatherInfo: MutableList<CityWeatherInfo> =
@@ -35,7 +27,7 @@ class CitiesListViewModel(
 
         listOfCities.forEach { city ->
             WeatherAPI.getWeatherByCity(
-                cacheDir,
+                retrofitClient,
                 city
             ) { weatherResponse ->
                 val cityWeatherInfo = CityWeatherInfo(
@@ -50,7 +42,9 @@ class CitiesListViewModel(
                     currentListOfCityWeatherInfo
                 )
             }
+
         }
+
     }
 
     fun observeLiveData() : LiveData<List<CityWeatherInfo>> {
@@ -65,8 +59,7 @@ class CitiesListViewModelFactory(private val context: Context) : ViewModelProvid
         if (modelClass.isAssignableFrom(CitiesListViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return CitiesListViewModel(
-                dataSource = CityDataSource.getDataSource(context.resources),
-                cacheDir = context.cacheDir
+                dataSource = CityDataSource.getDataSource(context.resources)
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
