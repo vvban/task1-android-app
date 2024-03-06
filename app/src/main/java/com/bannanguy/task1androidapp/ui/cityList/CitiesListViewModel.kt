@@ -1,13 +1,12 @@
 package com.bannanguy.task1androidapp.ui.cityList
 
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import com.bannanguy.task1androidapp.data.api.weather.WeatherAPI
 import com.bannanguy.task1androidapp.data.*
 import com.bannanguy.task1androidapp.data.api.weather.RetrofitClient
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class CitiesListViewModel(
     private val dataSource: CityDataSource
@@ -26,23 +25,27 @@ class CitiesListViewModel(
             ArrayList<CityWeatherInfo>(0).toMutableList()
 
         listOfCities.forEach { city ->
-            WeatherAPI.getWeatherByCity(
-                retrofitClient,
-                city
-            ) { weatherResponse ->
-                val cityWeatherInfo = CityWeatherInfo(
-                    city.id,
-                    weatherResponse.location.name,
-                    weatherResponse.current.temp_c
-                )
+            viewModelScope.launch(Dispatchers.IO) {
 
-                currentListOfCityWeatherInfo.add(cityWeatherInfo)
+                WeatherAPI.getWeatherByCity(
+                    retrofitClient,
+                    city
+                ) { weatherResponse ->
+                    val cityWeatherInfo = CityWeatherInfo(
+                        city.id,
+                        weatherResponse.location.name,
+                        weatherResponse.current.temp_c
+                    )
 
-                citiesWeatherInfoLiveData.postValue(
-                    currentListOfCityWeatherInfo
-                )
+                    currentListOfCityWeatherInfo.add(cityWeatherInfo)
+
+                    citiesWeatherInfoLiveData.postValue(
+                        currentListOfCityWeatherInfo
+                    )
+
+                }
+
             }
-
         }
 
     }

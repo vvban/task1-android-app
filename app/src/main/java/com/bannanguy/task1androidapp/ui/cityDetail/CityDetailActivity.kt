@@ -84,7 +84,6 @@ class CityDetailActivity : AppCompatActivity() {
 
     private fun setOnClickListener() {
         val backButton: Button = findViewById(R.id.back_button)
-
         backButton.setOnClickListener {
             val intent = Intent(this, CitiesListActivity()::class.java)
             startActivity(intent)

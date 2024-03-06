@@ -2,15 +2,14 @@ package com.bannanguy.task1androidapp.ui.cityDetail
 
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import com.bannanguy.task1androidapp.data.CityData
 import com.bannanguy.task1androidapp.data.api.weather.WeatherAPI
 import com.bannanguy.task1androidapp.data.CityDataSource
 import com.bannanguy.task1androidapp.data.CityDetailWeatherInfo
 import com.bannanguy.task1androidapp.data.api.weather.RetrofitClient
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class CityDetailViewModel(
     private val dataSource: CityDataSource
@@ -32,21 +31,25 @@ class CityDetailViewModel(
             return
         }
 
-        WeatherAPI.getWeatherByCity(
-            retrofitClient,
-            currentCity
-        ) { weatherResponse ->
-            val cityDetailWeatherInfo = CityDetailWeatherInfo(
-                currentCity.id,
-                currentCity.name,
-                weatherResponse.current.temp_c,
-                weatherResponse.current.condition.icon,
-                weatherResponse.current.condition.text,
-                weatherResponse.current.wind_kph,
-                weatherResponse.current.wind_dir
-            )
+        viewModelScope.launch(Dispatchers.IO) {
 
-            cityDetailInfoLiveData.postValue(cityDetailWeatherInfo)
+            WeatherAPI.getWeatherByCity(
+                retrofitClient,
+                currentCity
+            ) { weatherResponse ->
+                val cityDetailWeatherInfo = CityDetailWeatherInfo(
+                    currentCity.id,
+                    currentCity.name,
+                    weatherResponse.current.temp_c,
+                    weatherResponse.current.condition.icon,
+                    weatherResponse.current.condition.text,
+                    weatherResponse.current.wind_kph,
+                    weatherResponse.current.wind_dir
+                )
+
+                cityDetailInfoLiveData.postValue(cityDetailWeatherInfo)
+            }
+
         }
 
     }
