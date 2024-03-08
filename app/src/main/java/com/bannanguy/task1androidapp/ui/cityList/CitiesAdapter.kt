@@ -2,14 +2,13 @@ package com.bannanguy.task1androidapp.ui.cityList
 
 import android.content.res.Resources
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bannanguy.task1androidapp.R
 import com.bannanguy.task1androidapp.data.CityWeatherInfo
+import com.bannanguy.task1androidapp.databinding.CityWeaterItemBinding
 
 class CitiesAdapter(
     private val dataSet: ArrayList<CityWeatherInfo>,
@@ -19,15 +18,33 @@ class CitiesAdapter(
 ) : RecyclerView.Adapter<CitiesAdapter.ViewHolder>() {
 
     class ViewHolder(
-        view: View,
-    ) : RecyclerView.ViewHolder(view) {
+        private val binding: CityWeaterItemBinding,
+    ) : RecyclerView.ViewHolder(binding.root) {
 
-        val cityNameTextView: TextView
-        val cityTempTextView: TextView
+        fun bind(
+            viewHolder: ViewHolder,
+            owner: LifecycleOwner,
+            resources: Resources,
+            onClick: (CityWeatherInfo) -> Unit,
+            cityWeatherInfo: CityWeatherInfo
+        ) {
+            binding.cityName.text = cityWeatherInfo.name
 
-        init {
-            cityNameTextView = view.findViewById(R.id.city_name)
-            cityTempTextView = view.findViewById(R.id.city_temp)
+            cityWeatherInfo.temp.observe(owner) {
+                val temp = cityWeatherInfo.temp.value
+                if (temp?.isNaN() == false) {
+                    binding.cityTemp.text = String.format(
+                        "%s %s",
+                        temp.toString(),
+                        resources.getString(R.string.celsius_symbol)
+                    )
+                }
+            }
+
+            viewHolder.itemView.setOnClickListener {
+                onClick(cityWeatherInfo)
+            }
+
         }
 
     }
@@ -37,33 +54,18 @@ class CitiesAdapter(
         viewType: Int
     ): ViewHolder {
 
-        val view = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.city_weater_item, viewGroup, false)
-        return ViewHolder(view)
+        val binding = CityWeaterItemBinding.inflate(
+            LayoutInflater.from(viewGroup.context),
+            viewGroup,
+            false
+        )
+
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        // Get element from your dataset at this position and replace the
-        // contents of the view with that element
         val item = dataSet[position]
-
-        viewHolder.itemView.setOnClickListener {
-            onClick(item)
-        }
-
-        viewHolder.cityNameTextView.text = item.name
-
-        item.temp.observe(owner) {
-            val temp = item.temp.value
-            if (temp?.isNaN() == false) {
-                viewHolder.cityTempTextView.text = String.format(
-                    "%s %s",
-                    temp.toString(),
-                    resources.getString(R.string.celsius_symbol)
-                )
-            }
-        }
-
+        viewHolder.bind(viewHolder, owner, resources, onClick, item)
     }
 
     override fun getItemCount() = dataSet.size
