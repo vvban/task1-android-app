@@ -1,6 +1,5 @@
 package com.bannanguy.task1androidapp.ui.cityList
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bannanguy.task1androidapp.R
+import com.bannanguy.task1androidapp.data.CityDataSource
 import com.bannanguy.task1androidapp.data.CityWeatherInfo
 import com.bannanguy.task1androidapp.data.api.weather.RetrofitClient
 import com.bannanguy.task1androidapp.data.api.weather.RetrofitClientFactory
@@ -31,9 +31,8 @@ class CitiesListActivity : AppCompatActivity() {
         setAdapter()
 
         observeData()
-
         initRetrofitClient(cacheDir)
-        loadWeatherData()
+        loadCitiesList()
     }
 
     private fun initAdapter() {
@@ -46,7 +45,11 @@ class CitiesListActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        citiesAdapter = CitiesAdapter(resources) {
+        citiesAdapter = CitiesAdapter(
+            ArrayList(0),
+            resources,
+            this
+        ) {
             city -> adapterOnClick(city)
         }
     }
@@ -57,18 +60,30 @@ class CitiesListActivity : AppCompatActivity() {
         recyclerView.adapter = concatAdapter
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun observeData() {
-        // FIXME: We need it?
-//        citiesAdapter.currentList.clear()
 
         citiesListViewModel.observeLiveData().observe(this) {
             it?.let {
-                citiesAdapter.submitList(it as MutableList<CityWeatherInfo>)
-                // FIXME: We can't known when the last item will be added
-                citiesAdapter.notifyDataSetChanged()
+                /** Show city item without temperature in RecycleView **/
+                citiesAdapter.setList(it)
             }
         }
+    }
+
+    private fun loadCitiesList() {
+
+        // TODO: make pagination
+        //  temporary load all cities
+        val listOfCities = CityDataSource(resources).getCityList()
+
+        /**
+         * Update life data with city weather info and Double.NaN temperature
+         * Fetch real cities temperatures through API
+         **/
+        citiesListViewModel.setCitiesList(
+            retrofitWeatherClient,
+            listOfCities
+        )
     }
 
     private fun initRetrofitClient(cacheDir: File) {
@@ -76,10 +91,6 @@ class CitiesListActivity : AppCompatActivity() {
             "weatherapi",
             cacheDir
         )
-    }
-
-    private fun loadWeatherData() {
-        citiesListViewModel.loadWeatherData(retrofitWeatherClient)
     }
 
 }

@@ -8,44 +8,60 @@ import com.bannanguy.task1androidapp.data.api.weather.RetrofitClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class CitiesListViewModel(
-    private val dataSource: CityDataSource
-) : ViewModel() {
+class CitiesListViewModel : ViewModel() {
 
     private val citiesWeatherInfoLiveData: MutableLiveData<List<CityWeatherInfo>> by lazy {
         MutableLiveData<List<CityWeatherInfo>>()
     }
 
-    fun loadWeatherData(
-        retrofitClient: RetrofitClient
+    fun setCitiesList(
+        retrofitClient: RetrofitClient,
+        listOfCities: List<CityData>
     ) {
-        val listOfCities = dataSource.getCityList()
-
         val currentListOfCityWeatherInfo: MutableList<CityWeatherInfo> =
             ArrayList<CityWeatherInfo>(0).toMutableList()
 
         listOfCities.forEach { city ->
-            viewModelScope.launch(Dispatchers.IO) {
+            val cityWeatherInfo = CityWeatherInfo(
+                city.id,
+                city.name,
+                MutableLiveData<Double>(Double.NaN)
+            )
 
-                WeatherAPI.getWeatherByCity(
-                    retrofitClient,
-                    city
-                ) { weatherResponse ->
-                    val cityWeatherInfo = CityWeatherInfo(
-                        city.id,
-                        weatherResponse.location.name,
-                        weatherResponse.current.temp_c
-                    )
+            fetchCityWeatherInfo(
+                retrofitClient,
+                city,
+                cityWeatherInfo
+            )
 
-                    currentListOfCityWeatherInfo.add(cityWeatherInfo)
+            currentListOfCityWeatherInfo.add(cityWeatherInfo)
 
-                    citiesWeatherInfoLiveData.postValue(
-                        currentListOfCityWeatherInfo
-                    )
 
-                }
+        }
 
+        // Send all
+        citiesWeatherInfoLiveData.postValue(
+            currentListOfCityWeatherInfo
+        )
+
+    }
+
+    private fun fetchCityWeatherInfo(
+        retrofitClient: RetrofitClient,
+        city: CityData,
+        cityWeatherInfo: CityWeatherInfo
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            WeatherAPI.getWeatherByCity(
+                retrofitClient,
+                city
+            ) { weatherResponse ->
+                cityWeatherInfo.temp.postValue(
+                    weatherResponse.current.temp_c
+                )
             }
+
         }
 
     }
@@ -61,9 +77,7 @@ class CitiesListViewModelFactory(private val context: Context) : ViewModelProvid
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(CitiesListViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return CitiesListViewModel(
-                dataSource = CityDataSource.getDataSource(context.resources)
-            ) as T
+            return CitiesListViewModel() as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
