@@ -11,11 +11,14 @@ import com.bannanguy.task1androidapp.data.CityDataSource
 import com.bannanguy.task1androidapp.data.CityWeatherInfo
 import com.bannanguy.task1androidapp.data.api.weather.RetrofitClient
 import com.bannanguy.task1androidapp.data.api.weather.RetrofitClientFactory
+import com.bannanguy.task1androidapp.databinding.CityListActivityBinding
 import com.bannanguy.task1androidapp.ui.cityDetail.CITY_ID
 import com.bannanguy.task1androidapp.ui.cityDetail.CityDetailActivity
 import java.io.File
 
 class CitiesListActivity : AppCompatActivity() {
+    private lateinit var binding: CityListActivityBinding
+
     private val citiesListViewModel by viewModels<CitiesListViewModel> {
         CitiesListViewModelFactory(this)
     }
@@ -25,7 +28,9 @@ class CitiesListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.city_list_activity)
+        binding = CityListActivityBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         initAdapter()
         setAdapter()
@@ -56,7 +61,7 @@ class CitiesListActivity : AppCompatActivity() {
 
     private fun setAdapter() {
         val concatAdapter = ConcatAdapter(citiesAdapter)
-        val recyclerView: RecyclerView = findViewById(R.id.city_weather_list_recycler_view)
+        val recyclerView: RecyclerView = binding.cityWeatherListRecyclerView
         recyclerView.adapter = concatAdapter
     }
 

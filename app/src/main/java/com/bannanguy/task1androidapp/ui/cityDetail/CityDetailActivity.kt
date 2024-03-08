@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bannanguy.task1androidapp.R
 import com.bannanguy.task1androidapp.data.api.weather.RetrofitClient
 import com.bannanguy.task1androidapp.data.api.weather.RetrofitClientFactory
+import com.bannanguy.task1androidapp.databinding.CityDetailActivityBinding
+import com.bannanguy.task1androidapp.databinding.CityListActivityBinding
 import com.bannanguy.task1androidapp.ui.cityList.CitiesListActivity
 import com.squareup.picasso.Picasso
 import java.io.File
@@ -19,6 +21,7 @@ import kotlin.math.round
 const val CITY_ID = "city id"
 
 class CityDetailActivity : AppCompatActivity() {
+    private lateinit var binding: CityDetailActivityBinding
 
     private val cityDetailViewModel by viewModels<CityDetailViewModel> {
         CityDetailViewModelFactory(this)
@@ -29,7 +32,9 @@ class CityDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.city_detail_activity)
+        binding = CityDetailActivityBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         addOnBackPressedCallback()
         setOnClickListener()
@@ -53,17 +58,10 @@ class CityDetailActivity : AppCompatActivity() {
     }
 
     private fun observeData() {
-        val cityNameTextView: TextView = this.findViewById(R.id.city_name)
-        val cityTempTextView: TextView = this.findViewById(R.id.city_temp)
-        val cityWeatherIconImageView: ImageView = this.findViewById(R.id.city_weather_icon)
-        val cityConditionTextView: TextView = this.findViewById(R.id.city_condition_text)
-        val cityWindKphTextView: TextView = this.findViewById(R.id.city_wind_mps)
-        val cityWindDirTextView: TextView = this.findViewById(R.id.city_wind_dir)
-
         cityDetailViewModel.observeLiveData().observe(this) {
             it?.let {
-                cityNameTextView.text = it.name
-                cityTempTextView.text = String.format(
+                binding.cityName.text = it.name
+                binding.cityTemp.text = String.format(
                     "%s %s",
                     it.temp_c.toString(),
                     resources.getString(R.string.celsius_symbol)
@@ -72,19 +70,18 @@ class CityDetailActivity : AppCompatActivity() {
                     .load("https:" + it.condition_icon_uri)
                     .placeholder(R.drawable.image_placeholder)
                     .error(R.drawable.image_placeholder_error)
-                    .into(cityWeatherIconImageView)
-                cityConditionTextView.text = it.condition_text
+                    .into(binding.cityWeatherIcon)
+                binding.cityConditionText.text = it.condition_text
                 val windMps = round(it.wind_kph * 1000 / 3600 * 100) / 100
-                cityWindKphTextView.text = windMps.toString()
-                cityWindDirTextView.text = it.wind_dir
+                binding.cityWindMps.text = windMps.toString()
+                binding.cityWindDir.text = it.wind_dir
             }
         }
 
     }
 
     private fun setOnClickListener() {
-        val backButton: Button = findViewById(R.id.back_button)
-        backButton.setOnClickListener {
+        binding.backButton.setOnClickListener {
             val intent = Intent(this, CitiesListActivity()::class.java)
             startActivity(intent)
         }
@@ -111,8 +108,7 @@ class CityDetailActivity : AppCompatActivity() {
                 currentCityId!!
             )
         } else {
-            val cityNameTextView: TextView = this.findViewById(R.id.city_name)
-            cityNameTextView.text = resources.getString(R.string.city_name_unknown)
+            binding.cityName.text = resources.getString(R.string.city_name_unknown)
         }
     }
 
