@@ -1,19 +1,12 @@
 package com.bannanguy.task1androidapp.ui.cityDetail
 
-import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.bannanguy.task1androidapp.R
 import com.bannanguy.task1androidapp.data.api.weather.RetrofitClient
 import com.bannanguy.task1androidapp.data.api.weather.RetrofitClientFactory
 import com.bannanguy.task1androidapp.databinding.CityDetailActivityBinding
-import com.bannanguy.task1androidapp.databinding.CityListActivityBinding
-import com.bannanguy.task1androidapp.ui.cityList.CitiesListActivity
 import com.squareup.picasso.Picasso
 import java.io.File
 import kotlin.math.round
@@ -36,7 +29,6 @@ class CityDetailActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        addOnBackPressedCallback()
         setOnClickListener()
 
         readCurrentCityId()
@@ -44,17 +36,6 @@ class CityDetailActivity : AppCompatActivity() {
 
         initRetrofitClient(cacheDir)
         loadWeatherData()
-    }
-
-    private fun addOnBackPressedCallback() {
-        val onBackPressedCallback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                val intent = Intent(this@CityDetailActivity, CitiesListActivity()::class.java)
-                startActivity(intent)
-            }
-        }
-        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
-
     }
 
     private fun observeData() {
@@ -82,8 +63,7 @@ class CityDetailActivity : AppCompatActivity() {
 
     private fun setOnClickListener() {
         binding.backButton.setOnClickListener {
-            val intent = Intent(this, CitiesListActivity()::class.java)
-            startActivity(intent)
+            finish()
         }
     }
 

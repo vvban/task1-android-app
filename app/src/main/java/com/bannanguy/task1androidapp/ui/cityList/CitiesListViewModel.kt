@@ -14,7 +14,7 @@ class CitiesListViewModel : ViewModel() {
         MutableLiveData<List<CityWeatherInfo>>()
     }
 
-    private val currentListOfCityWeatherInfo: MutableList<CityWeatherInfo> =
+    val currentListOfCityWeatherInfo: MutableList<CityWeatherInfo> =
         ArrayList<CityWeatherInfo>(0).toMutableList()
 
     fun clearCitiesList() {
