@@ -14,14 +14,9 @@ class CitiesListViewModel : ViewModel() {
         MutableLiveData<List<CityWeatherInfo>>()
     }
 
-    val currentListOfCityWeatherInfo: MutableList<CityWeatherInfo> =
+    private val currentListOfCityWeatherInfo: MutableList<CityWeatherInfo> =
         ArrayList<CityWeatherInfo>(0).toMutableList()
 
-    fun clearCitiesList() {
-        currentListOfCityWeatherInfo.clear()
-    }
-
-    // FIXME: on change orientation cities have duplicates!
     fun addCitiesToList(
         retrofitClient: RetrofitClient,
         listOfCities: List<CityData>
@@ -84,4 +79,5 @@ class CitiesListViewModelFactory(private val context: Context) : ViewModelProvid
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
+
 }

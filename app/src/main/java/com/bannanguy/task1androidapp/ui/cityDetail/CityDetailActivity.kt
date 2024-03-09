@@ -25,9 +25,7 @@ class CityDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = CityDetailActivityBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        initView()
 
         setOnClickListener()
 
@@ -36,6 +34,25 @@ class CityDetailActivity : AppCompatActivity() {
 
         initRetrofitClient(cacheDir)
         loadWeatherData()
+    }
+
+    private fun initView() {
+        binding = CityDetailActivityBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+    }
+
+    private fun setOnClickListener() {
+        binding.backButton.setOnClickListener {
+            finish()
+        }
+    }
+
+    private fun readCurrentCityId() {
+        val bundle: Bundle? = intent.extras
+        if (bundle != null) {
+            currentCityId = bundle.getLong(CITY_ID)
+        }
     }
 
     private fun observeData() {
@@ -59,19 +76,6 @@ class CityDetailActivity : AppCompatActivity() {
             }
         }
 
-    }
-
-    private fun setOnClickListener() {
-        binding.backButton.setOnClickListener {
-            finish()
-        }
-    }
-
-    private fun readCurrentCityId() {
-        val bundle: Bundle? = intent.extras
-        if (bundle != null) {
-            currentCityId = bundle.getLong(CITY_ID)
-        }
     }
 
     private fun initRetrofitClient(cacheDir: File) {

@@ -36,9 +36,7 @@ class CitiesListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = CityListActivityBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        initView()
 
         retrieveData(savedInstanceState)
 
@@ -47,6 +45,7 @@ class CitiesListActivity : AppCompatActivity() {
 
         observeData()
         initRetrofitClient(cacheDir)
+
         if (fistPageIsLoaded) {
             fistPageIsLoaded = false
             loadCitiesIntoListWithPagination()
@@ -63,6 +62,12 @@ class CitiesListActivity : AppCompatActivity() {
     private fun saveData(outState: Bundle) {
         outState.putInt(numberOfItemValue, numberOfItem)
         outState.putBoolean(fistPageIsLoadedValue, fistPageIsLoaded)
+    }
+
+    private fun initView() {
+        binding = CityListActivityBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
     }
 
     private fun retrieveData(savedInstanceState: Bundle?) {

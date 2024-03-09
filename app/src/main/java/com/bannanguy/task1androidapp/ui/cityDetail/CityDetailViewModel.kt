@@ -57,6 +57,7 @@ class CityDetailViewModel(
     fun observeLiveData() : LiveData<CityDetailWeatherInfo> {
         return cityDetailInfoLiveData
     }
+
 }
 
 class CityDetailViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
@@ -70,4 +71,5 @@ class CityDetailViewModelFactory(private val context: Context) : ViewModelProvid
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
+
 }
