@@ -1,4 +1,4 @@
-package com.bannanguy.task1androidapp.data
+package com.bannanguy.task1androidapp.data.source
 
 import android.content.res.Resources
 import com.bannanguy.task1androidapp.R

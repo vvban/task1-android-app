@@ -1,8 +1,7 @@
 package com.bannanguy.task1androidapp.data.api.weather
 
 import android.util.Log
-import com.bannanguy.task1androidapp.data.CityData
-import com.bannanguy.task1androidapp.data.WeatherResponse
+import com.bannanguy.task1androidapp.data.source.CityData
 import com.bannanguy.task1androidapp.utils.ConfigPropertiesUtils
 import retrofit2.Call
 import retrofit2.Callback

@@ -10,6 +10,7 @@ https://github.com/vvban/task1-android-app/assets/48902183/ddae749a-25a4-4317-9d
 1. MVVM архітектура.
     - data
     - data.api.weather
+    - data.source
     - ui.cityDetail
     - ui.cityList
     - utils

@@ -1,6 +1,5 @@
 package com.bannanguy.task1androidapp.data.api.weather
 
-import com.bannanguy.task1androidapp.data.WeatherResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.bannanguy.task1androidapp.data.api.weather.WeatherAPI
 import com.bannanguy.task1androidapp.data.*
 import com.bannanguy.task1androidapp.data.api.weather.RetrofitClient
+import com.bannanguy.task1androidapp.data.source.CityData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

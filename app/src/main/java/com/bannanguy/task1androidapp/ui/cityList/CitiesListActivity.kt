@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bannanguy.task1androidapp.R
-import com.bannanguy.task1androidapp.data.CityDataSource
+import com.bannanguy.task1androidapp.data.source.CityDataSource
 import com.bannanguy.task1androidapp.data.CityWeatherInfo
 import com.bannanguy.task1androidapp.data.api.weather.RetrofitClient
 import com.bannanguy.task1androidapp.data.api.weather.RetrofitClientFactory

@@ -1,4 +1,4 @@
-package com.bannanguy.task1androidapp.data
+package com.bannanguy.task1androidapp.data.api.weather
 
 data class WeatherResponse(
     val location: LocationInfo,

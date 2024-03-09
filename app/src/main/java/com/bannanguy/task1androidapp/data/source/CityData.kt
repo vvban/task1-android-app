@@ -1,4 +1,4 @@
-package com.bannanguy.task1androidapp.data
+package com.bannanguy.task1androidapp.data.source
 
 data class CityData(
     val id: Long,

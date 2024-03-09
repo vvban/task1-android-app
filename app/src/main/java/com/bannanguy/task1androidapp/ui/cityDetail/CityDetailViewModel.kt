@@ -3,9 +3,9 @@ package com.bannanguy.task1androidapp.ui.cityDetail
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.*
-import com.bannanguy.task1androidapp.data.CityData
+import com.bannanguy.task1androidapp.data.source.CityData
 import com.bannanguy.task1androidapp.data.api.weather.WeatherAPI
-import com.bannanguy.task1androidapp.data.CityDataSource
+import com.bannanguy.task1androidapp.data.source.CityDataSource
 import com.bannanguy.task1androidapp.data.CityDetailWeatherInfo
 import com.bannanguy.task1androidapp.data.api.weather.RetrofitClient
 import kotlinx.coroutines.Dispatchers
