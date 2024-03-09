@@ -3,6 +3,7 @@ package com.bannanguy.task1androidapp.ui.cityList
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +27,9 @@ class CitiesListActivity : AppCompatActivity() {
     private lateinit var citiesAdapter: CitiesAdapter
     private lateinit var retrofitWeatherClient: RetrofitClient
 
+    private var numberOfItem = 0 // init number
+    private val itemToLoad = 12 // how many load per one time
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = CityListActivityBinding.inflate(layoutInflater)
@@ -35,9 +39,12 @@ class CitiesListActivity : AppCompatActivity() {
         initAdapter()
         setAdapter()
 
+//        citiesListViewModel.clearCitiesList()
         observeData()
         initRetrofitClient(cacheDir)
-        loadCitiesList()
+        loadCitiesIntoListWithPagination()
+
+        setLoadMoreClickListener()
     }
 
     private fun initAdapter() {
@@ -75,27 +82,45 @@ class CitiesListActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadCitiesList() {
-
-        // TODO: make pagination
-        //  temporary load all cities
-        val listOfCities = CityDataSource(resources).getCityList()
-
-        /**
-         * Update life data with city weather info and Double.NaN temperature
-         * Fetch real cities temperatures through API
-         **/
-        citiesListViewModel.setCitiesList(
-            retrofitWeatherClient,
-            listOfCities
-        )
-    }
-
     private fun initRetrofitClient(cacheDir: File) {
         retrofitWeatherClient = RetrofitClientFactory.createBySingleton(
             "weatherapi",
             cacheDir
         )
+    }
+
+    private fun loadCitiesIntoListWithPagination() {
+        val listOfCities = CityDataSource(resources).getCityList()
+
+        if (numberOfItem == listOfCities.size) {
+            Toast.makeText(this, resources.getString(R.string.all_cities_are_loaded_message), Toast.LENGTH_SHORT).show();
+            return
+        }
+
+        var newNumberOfItem = numberOfItem + itemToLoad
+        if (newNumberOfItem > listOfCities.size) {
+            newNumberOfItem = listOfCities.size
+        }
+
+        /**
+         * Update life data with city weather info and Double.NaN temperature
+         * Fetch real cities temperatures through API
+         **/
+        citiesListViewModel.addCitiesToList(
+            retrofitWeatherClient,
+            listOfCities.subList(
+                numberOfItem,
+                newNumberOfItem
+            )
+        )
+
+        numberOfItem = newNumberOfItem
+    }
+
+    private fun setLoadMoreClickListener() {
+        binding.loadMoreButton.setOnClickListener {
+            loadCitiesIntoListWithPagination()
+        }
     }
 
 }

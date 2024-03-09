@@ -32,4 +32,6 @@
     <string name="celsius_symbol">°C</string>
     <string name="city_wind_mps_header">Швидкість вітру (м/c):</string>
     <string name="city_wind_dir_header">Напрям вітру:</string>
+    <string name="load_more_button_text">Завантажите ще!</string>
+    <string name="all_cities_are_loaded_message">Більше міст немає!</string>
 </resources>

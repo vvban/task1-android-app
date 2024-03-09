@@ -14,13 +14,18 @@ class CitiesListViewModel : ViewModel() {
         MutableLiveData<List<CityWeatherInfo>>()
     }
 
-    fun setCitiesList(
+    private val currentListOfCityWeatherInfo: MutableList<CityWeatherInfo> =
+        ArrayList<CityWeatherInfo>(0).toMutableList()
+
+    fun clearCitiesList() {
+        currentListOfCityWeatherInfo.clear()
+    }
+
+    // FIXME: on change orientation cities have duplicates!
+    fun addCitiesToList(
         retrofitClient: RetrofitClient,
         listOfCities: List<CityData>
     ) {
-        val currentListOfCityWeatherInfo: MutableList<CityWeatherInfo> =
-            ArrayList<CityWeatherInfo>(0).toMutableList()
-
         listOfCities.forEach { city ->
             val cityWeatherInfo = CityWeatherInfo(
                 city.id,
@@ -35,8 +40,6 @@ class CitiesListViewModel : ViewModel() {
             )
 
             currentListOfCityWeatherInfo.add(cityWeatherInfo)
-
-
         }
 
         // Send all
