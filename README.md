@@ -2,7 +2,7 @@
 
 Мобільний застосунок для відстеження погоди. Android 5.0 і вище (Lollipop API 21+).
 
-
+https://github.com/vvban/task1-android-app/assets/48902183/ddae749a-25a4-4317-9d8c-baf622cadd6d
 
 (Координати міст не точні, тому є похибка в кліматичних умовах) 
 
